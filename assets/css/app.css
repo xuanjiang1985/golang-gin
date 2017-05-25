@@ -1,0 +1,20 @@
+header {position: fixed;width: 100%;top: 0;z-index: 9999;}
+nav {padding: 20px 20px;background-color: #00cdcd;}
+footer {position: fixed;bottom: 0;padding: 10px 0; width: 100%; background-color: #fafafa;border-top: 1px solid #e3e3e3;}
+nav span {color: white;font-size: 18px;}
+.btn-theme {color: white; background-color: #ff7f00;}
+.btn-theme:focus, .btn-theme:hover {color: white;background-color: #f67c03;}
+.btn-theme:active {background-color: #ff7f00;}
+#msg-section {margin-top: 80px;}
+.message {margin: 10px 0;}
+.author {display: block;margin-bottom: 8px;color: #969696;}
+.thanks {color: #969696;}
+.msg-content {font-size: 16px;}
+#message-modal {padding: 5px 5px 0 5px;}
+#message-close button {float: right;}
+#message-send button {float: right;}
+.thanks a {color: #969696;}
+.thanks a:hover {color: black;text-decoration: none;}
+.thanks a:focus {text-decoration: none;}
+/*all css*/
+.theme-color {color: #f67c03;}

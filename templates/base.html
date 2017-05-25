@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 minimum-scale=1.0 maximum-scale=1.0 user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	{% block title %}{% endblock %}
+	<!-- <link rel="stylesheet" href="/public/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/public/build/css/app-f22e99b033.css">
+    <!-- support IE8 支持 HTML5元素和媒体查询 -->
+      <!--[if lt IE 9]>
+         <script src="/public/js/html5shiv.js"></script>
+         <script src="/public/js/respond.min.js"></script>
+      <![endif]-->
+</head>
+<body>
+<header>
+	<nav>
+      <span><i class="fa fa-free-code-camp fa-2x" aria-hidden="true"></i> 爱吐槽</span>
+      <button class="btn btn-theme pull-right" data-toggle="modal" data-target="#myModal">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 吐槽
+      </button>
+  </nav>
+  <!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="message-modal">
+            <div id="message-close">
+              <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> 关闭</button>
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-body">
+              <form class="form-horizontal" action="/article/store" method="post" id="message-form">
+                <input type="hidden" name="_csrf" value="{{ token }}">
+                <div class="form-group">
+                  <textarea class="form-control" rows="4" name="content" maxlength="200" placeholder="说点什么" required="required" id="content"></textarea>
+                </div>
+              </form>
+            </div>
+            <div id="message-send">
+                  <button type="button" class="btn btn-primary" id="send">发表</button>
+            </div>
+            <div class="clearfix"></div>
+            <br>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</header>
+{% block content %}{% endblock %}
+<footer class="text-center">
+	Blog &copy; 2017 by xuanjiang - <a href="https://github.com/xuanjiang1985/golang-gin/tree/master" target="_blank">源码</a>
+</footer>
+<script src="http://cdn.staticfile.org/jquery/1.12.4/jquery.min.js"></script>
+<!-- <script src="/public/js/jquery-1.12.4.min.js"></script> -->
+<!-- <script src="/public/js/bootstrap.min.js"></script> -->
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/public/build/js/app-a1a1a757f2.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "gulp dev"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.3.1",
+    "gulp-delete-directory-files": "0.0.2",
+    "gulp-rev": "^7.1.2",
+    "gulp-rev-collector": "^1.2.1",
+    "gulp-uglify": "2.1.2",
+    "run-sequence": "^1.2.2"
+  }
+}
