@@ -3,13 +3,16 @@ package conf
 import (
 	"github.com/dlintw/goconf"
 	"log"
+	//"os"
 )
 
 var Conn string
 
+//var basePath = os.Getenv("GOPATH")
+
 //初始化数据库配置
 func init() {
-	conf, err := goconf.ReadConfigFile(".env")
+	conf, err := goconf.ReadConfigFile(basePath + "/src/golang-gin/.env")
 	if err != nil {
 		log.Println(err)
 		return
