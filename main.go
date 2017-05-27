@@ -35,6 +35,7 @@ func main() {
 	r.GET("/", indexC.Get)
 	r.GET("/test", forTest)
 	r.GET("/article", articleC.Get)
+	r.GET("/article/add-thanks/:id", articleC.AddThanks)
 	r.POST("/article/store", articleC.Store)
 	r.Run(":8080")
 }

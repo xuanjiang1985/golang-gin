@@ -5,3 +5,6 @@
 2017-05-21 00:24:53 [DBG] [controller/articleController.go:49] &[{1 0 舞蹈服，奥斯卡的风景了科技 开机按劳动法开始了对方 2017-05-16 11:13:17 2017-05-16 11:13:17} {2 0 科技科技就离开，科技看了 我杀戮空间放辣椒粉，阿卡家乐福临时看风景拉客积分 2017-05-16 11:14:08 2017-05-16 11:14:08}]
 2017-05-21 17:53:18 [DBG] [controller/articleController.go:49] &[{1 0 舞蹈服，奥斯卡的风景了科技 开机按劳动法开始了对方 2017-05-16 11:13:17 2017-05-16 11:13:17} {2 0 科技科技就离开，科技看了 我杀戮空间放辣椒粉，阿卡家乐福临时看风景拉客积分 2017-05-16 11:14:08 2017-05-16 11:14:08}]
 2017-05-25 10:24:52 [ERR] [controller/articleController.go:46] can't read db missing destination name thanks in *[]ctrl.Articles
+2017-05-27 09:17:32 [ERR] [controller/indexController.go:33] can't read db missing destination name user_id in *[]ctrl.Articles
+2017-05-27 09:39:12 [DBG] [controller/articleController.go:85] 3
+2017-05-27 09:42:19 [INF] [controller/articleController.go:85] 3

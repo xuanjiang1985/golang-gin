@@ -19,7 +19,9 @@ cd $GOPATH/src/golang-gin
 $GOBIN/godep restore
 ```
 ### copy .env.example to .env and set mysql host.
-`cp .env.example .env`
+```
+cp .env.example .env
+```
 
 ### run migrations to create database
 ```
@@ -27,6 +29,13 @@ cd $GOPATH/src/golang-gin/migrations
 go run migrate.go
 ```
 ### finally
-`go run main.go
-`
+```
+go run main.go
+```
 #### localhost:8080
+
+### don't forget to compress js and css once you changed them
+```
+cd $GOPATH/src/golang-gin
+gulp
+```

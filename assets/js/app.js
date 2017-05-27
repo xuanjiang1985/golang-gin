@@ -2,8 +2,10 @@ $(function(){
 	// give thanks
 	$(".btn-thx").click(function(){
 		var dom_i = $(this).children("i:last-child");
+		var id = $(this).parent().attr("data-id");
 			dom_i.text(Number(dom_i.text()) + 1);
-		$(this).unbind("click");
+			$(this).unbind("click");
+		$.get("/article/add-thanks/" + id);
 	});
 	//create a short article
 	$("#send").click(function(){
