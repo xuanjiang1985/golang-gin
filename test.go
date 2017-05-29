@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/dchest/uniuri"
+	"time"
 )
 
 func main() {
-	fmt.Println(uniuri.New())
+	fmt.Println(time.Now().Unix())
+	fmt.Println(time.Now())
+	fmt.Println(time.Now().UTC())
+	fmt.Println(time.Now().UTC().Unix())
 }

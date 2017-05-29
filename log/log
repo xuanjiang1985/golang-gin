@@ -8,3 +8,5 @@
 2017-05-27 09:17:32 [ERR] [controller/indexController.go:33] can't read db missing destination name user_id in *[]ctrl.Articles
 2017-05-27 09:39:12 [DBG] [controller/articleController.go:85] 3
 2017-05-27 09:42:19 [INF] [controller/articleController.go:85] 3
+2017-05-28 17:23:35 [ERR] [controller/indexController.go:33] can't read db sql: Scan error on column index 5: unsupported Scan, storing driver.Value type []uint8 into type *time.Time
+2017-05-29 10:20:07 [ERR] [controller/indexController.go:53] can't read db Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '%Y-%m-%d %H:%i) as created_at FROM articles ORDER BY id DESC LIMIT ?,10' at line 1

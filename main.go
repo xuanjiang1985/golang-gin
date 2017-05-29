@@ -14,6 +14,7 @@ import (
 //import controllers
 var indexC *ctrl.IndexController
 var articleC *ctrl.ArticleController
+var authC *ctrl.AuthController
 
 func main() {
 
@@ -25,18 +26,22 @@ func main() {
 	r.Use(csrf.Middleware(csrf.Options{
 		Secret: "wang123",
 		ErrorFunc: func(c *gin.Context) {
-			c.String(400, "400, timeout status, please return and refresh the page.")
+			c.String(400, "400, token mismatch, please return and refresh the page.")
 		},
 	}))
-	//middleware
+	//open log middleware
 	r.Use(Logger(), Recover())
+
 	r.Static("/public", "./public")
 	r.HTMLRender = pongo2gin.Default()
 	r.GET("/", indexC.Get)
 	r.GET("/test", forTest)
 	r.GET("/article", articleC.Get)
-	r.GET("/article/add-thanks/:id", articleC.AddThanks)
+	r.GET("/article/add-thank/:id", articleC.AddThank)
+	r.POST("/article/add-comment", articleC.AddComment)
+	r.GET("/article/get-comments/:id", articleC.GetComments)
 	r.POST("/article/store", articleC.Store)
+	r.GET("/register", authC.GetRegister)
 	r.Run(":8080")
 }
 

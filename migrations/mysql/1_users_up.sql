@@ -6,8 +6,8 @@ CREATE TABLE `users` (
      `remember_token` varchar(100) DEFAULT NULL,
      `sex` tinyint(4) DEFAULT '0',
      `admin` tinyint(4) DEFAULT '0',
-     `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-     `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     `created_at` int(11) DEFAULT 0,
+     `updated_at` int(11) DEFAULT 0,
      PRIMARY KEY (`id`),
      UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

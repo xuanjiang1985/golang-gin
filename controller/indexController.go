@@ -7,7 +7,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"golang-gin/csrf"
 	"gopkg.in/gin-gonic/gin.v1"
+	"math"
 	"net/http"
+	"strconv"
 )
 
 type IndexController struct {
@@ -27,11 +29,45 @@ func (ct *IndexController) Get(c *gin.Context) {
 	defer db.Close()
 
 	p := []Articles{}
-	err = db.Select(&p, "SELECT * FROM articles ORDER BY id DESC")
+
+	//if has page param for articles
+	page := c.Query("page")
+	var skip int
+	var current_page int
+	if page == "" {
+		skip = 0
+		current_page = 1
+	} else {
+		b, ok := strconv.Atoi(page)
+		if ok != nil || b < 1 {
+			c.String(404, "404 page not found")
+			return
+		}
+		skip = b*10 - 10
+		current_page = b
+	}
+	//sql select 10 articles
+	err = db.Select(&p, "SELECT *, FROM_UNIXTIME(created_at, '%Y-%m-%d %H:%i') as created_at FROM articles ORDER BY id DESC LIMIT ?,10", skip)
 	if err != nil {
 		seelog.Error("can't read db ", err)
 		return
 	}
+	//find all pages
+	var all int
+	err = db.Get(&all, "SELECT count(*) FROM articles")
+	if err != nil {
+		seelog.Error("can't read db ", err)
+		return
+	}
+	all_page := float64(all) / float64(10)
+	allpage := math.Ceil(all_page)
+	all = int(allpage)
+
 	csrfToken := csrf.GetToken(c)
-	c.HTML(http.StatusOK, "index.html", pongo2.Context{"token": csrfToken, "articles": &p})
+	c.HTML(http.StatusOK, "index.html", pongo2.Context{
+		"token":        csrfToken,
+		"articles":     &p,
+		"current_page": current_page,
+		"all_page":     all,
+	})
 }

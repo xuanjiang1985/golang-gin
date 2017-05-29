@@ -16,12 +16,34 @@
 				</span>
 				<p class="msg-content">{{ article.Content }}</p>
 				<span class="thanks" data-id="{{ article.Id }}">
-					<a href="javascript:;" class="btn-thx"><i class="fa fa-heart-o" aria-hidden="true"></i> <i>{{ article.Thanks }}</i> 感谢</a> &nbsp;&nbsp; 
-					<a href="javascript:;"><i class="fa fa-commenting-o" aria-hidden="true"></i> <i>{{ article.Comments }}</i> 条评论</a>
+					<a href="javascript:;" class="btn-thx"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i>{{ article.Thanks }}</i> 赞</a> &nbsp;&nbsp; 
+					<a href="javascript:;" class="get-comments"><i class="fa fa-commenting-o" aria-hidden="true"></i> <i>{{ article.Comments }}</i> 条评论</a>
 				</span>
+				<div class="comments">
+					<i class="fa fa-caret-up fa-2x comments-up" aria-hidden="true"></i>
+					<div></div>
+					<div id="{{ article.Id }}" data-currpage="1">
+						<div id="comments-page">
+							<span href="javascript:;" class="btn btn-default comment-prev">上一页</span>
+							<a href="javascript:;" class="btn btn-info disabled">1</a>
+							<span href="javascript:;" class="btn btn-default comment-next">下一页</span>
+						</div>
+						<input type="text" name="comment" maxlength="255" class="form-control input-comment" placeholder="请写下你的评论">
+						<button class="btn btn-theme btn-comment">评论</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 	{% endfor %}
+	<br>
+	<div id="page">
+		{% if current_page ==1 %}<span class="btn btn-default disabled">&lt;</span>{% else %}<a href="/?page={{ current_page - 1 }}" class="btn btn-default">&lt;</a>{% endif %}&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="/?page={{ current_page }}" class="btn btn-info disabled">{{ current_page }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		{% if current_page == all_page %}<span class="btn btn-default disabled">&gt;</span>{% else %}<a href="/?page={{ current_page + 1 }}" class="btn btn-default">&gt;</a>{% endif %}
+	</div>
+	{{ test_time }}
+	<br><br><br>
 </div>
 {% endblock %}
