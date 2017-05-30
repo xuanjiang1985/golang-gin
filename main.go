@@ -30,7 +30,7 @@ func main() {
 		},
 	}))
 	//open log middleware
-	r.Use(Logger(), Recover())
+	r.Use(Logger())
 
 	r.Static("/public", "./public")
 	r.HTMLRender = pongo2gin.Default()
@@ -42,6 +42,7 @@ func main() {
 	r.GET("/article/get-comments/:id", articleC.GetComments)
 	r.POST("/article/store", articleC.Store)
 	r.GET("/register", authC.GetRegister)
+	r.POST("/register", authC.PostRegister)
 	r.Run(":8080")
 }
 
@@ -61,7 +62,7 @@ func Logger() gin.HandlerFunc {
 
 		// access the status we are sending
 		status := c.Writer.Status()
-		path := c.Request.URL.Path
+		path := c.Request.URL
 		log.Println(status, latency, c.Request.Method, path)
 	}
 }

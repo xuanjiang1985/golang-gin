@@ -1,6 +1,5 @@
 header {position: fixed;width: 100%;top: 0;z-index: 9999;}
 nav {padding: 20px 20px;background-color: #00cdcd;}
-footer {position: fixed;bottom: 0;padding: 10px 0; width: 100%; background-color: #fafafa;border-top: 1px solid #e3e3e3;}
 nav a {color: white;font-size: 18px;}
 nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .btn-theme {color: white; background-color: #ff7f00;}
@@ -27,8 +26,8 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .input-comment {margin-bottom: 10px;}
 .btn-comment {float: right;}
 #page {text-align: center;}
-#comments-page {text-align: center;margin: 8px 0;}
+.comments-page {text-align: center;margin: 8px 0;}
 /*all css*/
 .theme-color {color: #f67c03;}
-#ajax-status {position: fixed;display: none; width: 300px; height: 100px;padding-top: 22px;text-align: center; margin:auto; left: 0; right: 0;top:0;bottom:0; border-radius: 5px;background-color: rgba(0,0,0,0.5); font-size: 18px;color: white;}
+#ajax-status {position: fixed;display: none; width: 300px;height: 100px; padding: 15px 10px;text-align: center; margin:auto; left: 0; right: 0;top:0;bottom:0; border-radius: 5px;background-color: rgba(0,0,0,0.7); font-size: 18px;color: white;}
 .text-success1 {color: #05d879;/*亮绿色*/}
