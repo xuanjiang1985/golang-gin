@@ -10,6 +10,7 @@ import (
 	"gopkg.in/gin-gonic/gin.v1"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type AuthController struct {
@@ -32,10 +33,10 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	defer seelog.Flush()
 
 	type Validator struct {
-		Name             string `valid:"required,length(3|15)"`
-		Email            string `valid:"required,email"`
-		Password         string `valid:"required,length(6|150)"`
-		Confirm_password string `valid:"required,length(6|150)"`
+		Name             string `valid:"required~昵称：不能为空,length(4|15)~昵称：4至15个字符之间"`
+		Email            string `valid:"required~邮箱：不能为空,email~邮箱：必须是email格式"`
+		Password         string `valid:"required~密码：不能为空,length(6|150)~密码：至少6个字符"`
+		Confirm_password string `valid:"required~确认密码：不能为空,length(6|150)~确认密码：至少6个字符"`
 	}
 	data := &Validator{
 		Name:             c.PostForm("昵称"),
@@ -43,11 +44,19 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 		Password:         c.PostForm("密码"),
 		Confirm_password: c.PostForm("密码确认"),
 	}
-
-	result, err := valid.ValidateStruct(data)
+	//true or false of validator
+	csrfToken := csrf.GetToken(c)
+	_, err := valid.ValidateStruct(data)
 	if err != nil {
-		log.Println(err.Error())
+		msg := strings.Trim(err.Error(), ";")
+		message := strings.Split(msg, ";")
+		log.Println(data)
+		c.HTML(200, "auth/register.html", pongo2.Context{
+			"token":  csrfToken,
+			"errors": message,
+			"data":   data,
+		})
+		return
 	}
-	log.Println(result)
 	c.String(http.StatusOK, "done")
 }

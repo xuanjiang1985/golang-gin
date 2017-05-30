@@ -8,18 +8,27 @@
 <div class="container-fluid" id="msg-section">
 <br>
 	<div class="col-sm-offset-2 col-sm-8">
+		{% if errors %}
+		<div class="alert alert-danger">
+			<ul>
+				{% for error in errors %}
+				<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
 		        <form class="form-horizontal" role="form" method="post" action="/register" id="form-register">
 					<input type="hidden" name="_csrf" value="{{ token }}">
 		        	<div class="form-group">
 		        		<label class="col-sm-2 control-label">昵称</label>
 		        		<div class="col-sm-8">
-		        			<input type="text" name="昵称" class="form-control" required="required" maxlength="15" placeholder="昵称">
+		        			<input type="text" name="昵称" class="form-control" value="{{ data.Name }}" required="required" maxlength="15" placeholder="昵称">
 		        		</div>
 		        	</div>
 		        	<div class="form-group">
 		        		<label class="col-sm-2 control-label">账户</label>
 		        		<div class="col-sm-8">
-		        			<input type="email" name="邮箱" class="form-control" required="required" placeholder="邮箱">
+		        			<input type="email" name="邮箱" class="form-control" value="{{ data.Email }}" required="required" placeholder="邮箱">
 		        		</div>
 		        	</div>
 		        	<div class="form-group">
