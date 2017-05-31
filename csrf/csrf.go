@@ -95,20 +95,20 @@ func Middleware(options Options) gin.HandlerFunc {
 			return
 		}
 
-		var salt string
+		var csrfToken string
 
-		if s, ok := session.Get(csrfSalt).(string); !ok || len(s) == 0 {
+		if s, ok := session.Get(csrfToken).(string); !ok || len(s) == 0 {
 			c.Next()
 			return
 		} else {
-			salt = s
+			csrfToken = s
 		}
 
-		session.Delete(csrfSalt)
+		//session.Delete(csrfSalt)
 
 		token := tokenGetter(c)
 
-		if tokenize(options.Secret, salt) != token {
+		if csrfToken != token {
 			errorFunc(c)
 			return
 		}
@@ -122,13 +122,17 @@ func GetToken(c *gin.Context) string {
 	session := sessions.Default(c)
 	secret := c.MustGet(csrfSecret).(string)
 
-	if t, ok := c.Get(csrfToken); ok {
-		return t.(string)
+	// if t, ok := session.Get(csrfToken); ok {
+	// 	return t.(string)
+	// }
+	if s, ok := session.Get(csrfToken).(string); ok && len(s) != 0 {
+		return s
 	}
 
 	salt := uniuri.New()
 	token := tokenize(secret, salt)
-	session.Set(csrfSalt, salt)
+	session.Set(csrfToken, token)
+	//session.Set(csrfSalt, salt)
 	session.Save()
 	c.Set(csrfToken, token)
 

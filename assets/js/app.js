@@ -162,48 +162,48 @@ $(function(){
 		});
 	});
 	//register validate
-		// $("#form-register").validate({
-		// 	rules: {
-		// 	    昵称: {
-		// 	    	required: true,
-		// 	    	minlength: 4,
-		// 	    	maxlength: 15
-		// 	    },
-		// 	    邮箱: {
-		// 	      required: true,
-		// 	      email: true
-		// 	    },
-		// 	    密码: {
-		// 	      required: true,
-		// 	      minlength: 6
-		// 	    },
-		// 	    密码确认: {
-		// 	    	required: true,
-		// 	      	minlength: 6,
-		// 	      	equalTo: "#password"
-		// 	    }
-		// 	  },
-		// 	  messages: {
-		// 	    昵称: {
-		// 	    	required: "不能为空",
-		// 	    	minlength: "至少4个字符",
-		// 	    	maxlength: "最多15个字符"
-		// 	    },
-		// 	    邮箱: {
-		// 	      required: "不能为空",
-		// 	      email: "请填写正确的格式 如：name@domain.com"
-		// 	    },
-		// 	    密码: {
-		// 	      required: "不能为空",
-		// 	      minlength: "至少6位"
-		// 	    },
-		// 	    密码确认: {
-		// 	    	required: "不能为空",
-		// 	      	minlength: "至少6位",
-		// 	      	equalTo: "两次密码不相同"
-		// 	    }
-		// 	  }
-		// });
+		$("#form-register").validate({
+			rules: {
+			    昵称: {
+			    	required: true,
+			    	minlength: 4,
+			    	maxlength: 15
+			    },
+			    邮箱: {
+			      required: true,
+			      email: true
+			    },
+			    密码: {
+			      required: true,
+			      minlength: 6
+			    },
+			    密码确认: {
+			    	required: true,
+			      	minlength: 6,
+			      	equalTo: "#password"
+			    }
+			  },
+			  messages: {
+			    昵称: {
+			    	required: "不能为空",
+			    	minlength: "至少4个字符",
+			    	maxlength: "最多15个字符"
+			    },
+			    邮箱: {
+			      required: "不能为空",
+			      email: "请填写正确的格式 如：name@domain.com"
+			    },
+			    密码: {
+			      required: "不能为空",
+			      minlength: "至少6位"
+			    },
+			    密码确认: {
+			    	required: "不能为空",
+			      	minlength: "至少6位",
+			      	equalTo: "两次密码不相同"
+			    }
+			  }
+		});
 });
 
 // give thanks

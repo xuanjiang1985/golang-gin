@@ -7,7 +7,7 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .btn-theme:active {background-color: #ff7f00;}
 #msg-section {margin-top: 80px;}
 #myModal, #loginModal {margin-top: 30px;}
-#login {float: right; margin-left: 10px;color: white;cursor: pointer;}
+#login {float: right; margin-left: 15px;color: white;cursor: pointer;}
 #login:hover {color: #fcfcfc;}
 .message {margin: 10px 0;background-color: #fcfcfc;}
 .author {display: block;margin-bottom: 8px;color: #969696;}

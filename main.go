@@ -26,7 +26,7 @@ func main() {
 	r.Use(csrf.Middleware(csrf.Options{
 		Secret: "wang123",
 		ErrorFunc: func(c *gin.Context) {
-			c.String(400, "400, token mismatch, please return and refresh the page.")
+			c.String(403, "403, token mismatch, please return and refresh the page.")
 		},
 	}))
 	//open log middleware
