@@ -204,6 +204,12 @@ $(function(){
 			    }
 			  }
 		});
+		//login image header
+		$("#login").mouseenter(function(){
+			$("#user-dropdown").show();
+		}).mouseleave(function(){
+			$("#user-dropdown").hide();
+		});
 });
 
 // give thanks

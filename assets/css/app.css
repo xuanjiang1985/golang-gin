@@ -7,8 +7,14 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .btn-theme:active {background-color: #ff7f00;}
 #msg-section {margin-top: 80px;}
 #myModal, #loginModal {margin-top: 30px;}
-#login {float: right; margin-left: 15px;color: white;cursor: pointer;}
-#login:hover {color: #fcfcfc;}
+#btn-tucao {margin-top: 5px;}
+#login {float: right;position: relative; margin-left: 8px;padding: 0 5px; color: white;cursor: pointer;}
+#login2 {float: right;margin-left: 5px;color: white;cursor: pointer;margin-left: 8px;padding-top: 7px;}
+#login2:hover {color: #fcfcfc;}
+#login img {width: 44px;border:2px solid white; border-radius: 22px;}
+#user-dropdown {display: none; position: absolute; right: -18px;padding: 10px 0; text-align: center; color: #515151;background-color: white;box-shadow: -2px 2px 5px #828282;}
+#user-dropdown li {width: 100px;padding-top: 10px; list-style-type: none;}
+#user-dropdown li a {display: inline-block;width: 100%; font-size: 14px;}
 .message {margin: 10px 0;background-color: #fcfcfc;}
 .author {display: block;margin-bottom: 8px;color: #969696;}
 .thanks {color: #969696;}
@@ -29,5 +35,8 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .comments-page {text-align: center;margin: 8px 0;}
 /*all css*/
 .theme-color {color: #f67c03;}
+.theme-a {color: #515151;}
+.theme-a:hover {color: #f67c03;text-decoration: none;}
+.theme-a:focus {text-decoration: none;}
 #ajax-status {position: fixed;display: none; width: 300px;height: 100px; padding: 15px 10px;text-align: center; margin:auto; left: 0; right: 0;top:0;bottom:0; border-radius: 5px;background-color: rgba(0,0,0,0.7); font-size: 18px;color: white;}
 .text-success1 {color: #05d879;/*亮绿色*/}

@@ -43,6 +43,7 @@ func main() {
 	r.GET("/article/get-comments/:id", articleC.GetComments)
 	r.POST("/article/store", articleC.Store)
 	r.GET("/register", authC.GetRegister)
+	r.GET("/logout", authC.GetLogout)
 	r.POST("/register", authC.PostRegister)
 	r.Run(":8080")
 }
@@ -79,17 +80,17 @@ func AuthMiddleware() gin.HandlerFunc {
 	type HasAuth struct {
 		Check    bool
 		UserName string
-		UserId   int
 	}
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		authValue := session.Get("authUser")
+		authValue := session.Get("authUserName")
 		log.Println(authValue)
 		if authValue == nil {
-			user := HasAuth{false, "", 0}
+			user := HasAuth{false, ""}
 			c.Set("authUser", user)
 		} else {
-			user := HasAuth{true, "zhougang", 1}
+			s, _ := authValue.(string)
+			user := HasAuth{true, s}
 			c.Set("authUser", user)
 		}
 		c.Next()

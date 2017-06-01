@@ -86,13 +86,22 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	}
 	//session start
 	userId, _ := result.LastInsertId()
-	userInfo := map[string]string{
-		"name": c.PostForm("昵称"),
-		"id":   string(userId),
-	}
+	// userInfo := map[string]string{
+	// 	"name": c.PostForm("昵称"),
+	// 	"id":   string(userId),
+	// }
 	//log.Println(userId)
 	session := sessions.Default(c)
-	session.Set("authUser", userInfo)
+	session.Set("authUserName", c.PostForm("昵称"))
+	session.Set("authUserId", userId)
+	session.Save()
+	c.Redirect(301, "/")
+}
+
+func (ct *AuthController) GetLogout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("authUserName")
+	session.Delete("authUserId")
 	session.Save()
 	c.Redirect(301, "/")
 }
