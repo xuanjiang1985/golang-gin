@@ -28,3 +28,16 @@ type Comments struct {
 	Created_at string
 	Updated_at string
 }
+
+//comments in table
+type Users struct {
+	Id             int
+	Name           string
+	Email          string
+	Password       string
+	Remember_token string
+	Sex            int
+	Admin          int
+	Created_at     int
+	Updated_at     int
+}

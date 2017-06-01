@@ -4,6 +4,11 @@
 	"GodepVersion": "v79",
 	"Deps": [
 		{
+			"ImportPath": "github.com/asaskevich/govalidator",
+			"Comment": "v6-20-gaa5cce4",
+			"Rev": "aa5cce4a76edb1a5acecab1870c17abbffb5419e"
+		},
+		{
 			"ImportPath": "github.com/boj/redistore",
 			"Comment": "v1.2-5-g4562487",
 			"Rev": "4562487a4bee9a7c272b72bfaeda4917d0a47ab9"
@@ -135,6 +140,14 @@
 			"ImportPath": "github.com/robvdl/pongo2gin",
 			"Comment": "1.0.0",
 			"Rev": "fcec049d4e15149e6754248e7cf8bd7fc4299819"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "ab89591268e0c8b748cbe4047b00197516011af5"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "ab89591268e0c8b748cbe4047b00197516011af5"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",

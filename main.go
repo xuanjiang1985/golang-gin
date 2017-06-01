@@ -29,6 +29,7 @@ func main() {
 			c.String(403, "403, token mismatch, please return and refresh the page.")
 		},
 	}))
+	r.Use(AuthMiddleware())
 	//open log middleware
 	r.Use(Logger())
 
@@ -52,7 +53,7 @@ func Logger() gin.HandlerFunc {
 		t := time.Now()
 
 		// Set example variable
-		c.Set("example", "12345")
+		//c.Set("example", "12345")
 
 		// before request
 		c.Next()
@@ -73,8 +74,29 @@ func Recover() gin.HandlerFunc {
 	}
 }
 
+//Auth
+func AuthMiddleware() gin.HandlerFunc {
+	type HasAuth struct {
+		Check    bool
+		UserName string
+		UserId   int
+	}
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		authValue := session.Get("authUser")
+		log.Println(authValue)
+		if authValue == nil {
+			user := HasAuth{false, "", 0}
+			c.Set("authUser", user)
+		} else {
+			user := HasAuth{true, "zhougang", 1}
+			c.Set("authUser", user)
+		}
+		c.Next()
+	}
+}
+
 //test
 func forTest(c *gin.Context) {
 
-	c.String(200, "done")
 }

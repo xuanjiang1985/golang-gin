@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"golang-gin/csrf"
 	"gopkg.in/gin-gonic/gin.v1"
+	//"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -64,10 +65,14 @@ func (ct *IndexController) Get(c *gin.Context) {
 	all = int(allpage)
 
 	csrfToken := csrf.GetToken(c)
+	//auth
+	authUser, _ := c.Get("authUser")
+	//log.Println(authUser)
 	c.HTML(http.StatusOK, "index.html", pongo2.Context{
 		"token":        csrfToken,
 		"articles":     &p,
 		"current_page": current_page,
 		"all_page":     all,
+		"authUser":     authUser,
 	})
 }

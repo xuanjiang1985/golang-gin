@@ -19,7 +19,11 @@
 <header>
 	<nav>
       <a href="/"><i class="fa fa-free-code-camp fa-2x" aria-hidden="true"></i> 爱吐槽</a>
+      {% if authUser.Check %}
+      <span id="login"><i class="fa fa-user fa-2x" aria-hidden="true"></i> {{ auth.UserName }}</span>
+      {% else %}
       <span id="login" data-toggle="modal" data-target="#loginModal"><i class="fa fa-user fa-2x" aria-hidden="true"></i> 登录</span>
+      {% endif %}
       <button class="btn btn-theme pull-right" data-toggle="modal" data-target="#myModal">
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 吐槽
       </button>

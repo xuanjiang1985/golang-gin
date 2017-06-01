@@ -5,12 +5,15 @@ import (
 	seelog "github.com/cihub/seelog"
 	"github.com/flosch/pongo2"
 	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx"
 	"golang-gin/csrf"
+	"golang-gin/sessions"
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gin-gonic/gin.v1"
-	"log"
+	//"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type AuthController struct {
@@ -31,6 +34,13 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	//开启日志
 	seelog.ReplaceLogger(logger)
 	defer seelog.Flush()
+	//数据库连接
+	db, err := sqlx.Connect("mysql", sqlconn)
+	if err != nil {
+		seelog.Error("can't connect db ", err)
+		return
+	}
+	defer db.Close()
 
 	type Validator struct {
 		Name             string `valid:"required~昵称：不能为空,length(4|15)~昵称：4至15个字符之间"`
@@ -46,11 +56,11 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	}
 	//true or false of validator
 	csrfToken := csrf.GetToken(c)
-	_, err := valid.ValidateStruct(data)
+	ok, err := valid.ValidateStruct(data)
 	if err != nil {
 		msg := strings.Trim(err.Error(), ";")
 		message := strings.Split(msg, ";")
-		log.Println(data)
+		//log.Println(data)
 		c.HTML(200, "auth/register.html", pongo2.Context{
 			"token":  csrfToken,
 			"errors": message,
@@ -58,5 +68,31 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 		})
 		return
 	}
-	c.String(http.StatusOK, "done")
+	//store user
+	if ok {
+
+	}
+	password := []byte(c.PostForm("密码"))
+	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	unix_time := time.Now().Unix()
+	result, err := db.Exec(`INSERT INTO users (name,email,password,created_at,updated_at) VALUES (?,?,?,?,?)`, c.PostForm("邮箱"), c.PostForm("昵称"), hashedPassword, unix_time, unix_time)
+	if err != nil {
+		c.HTML(200, "auth/register.html", pongo2.Context{
+			"token":  csrfToken,
+			"errors": []string{"邮箱已存在"},
+			"data":   data,
+		})
+		return
+	}
+	//session start
+	userId, _ := result.LastInsertId()
+	userInfo := map[string]string{
+		"name": c.PostForm("昵称"),
+		"id":   string(userId),
+	}
+	//log.Println(userId)
+	session := sessions.Default(c)
+	session.Set("authUser", userInfo)
+	session.Save()
+	c.Redirect(301, "/")
 }
