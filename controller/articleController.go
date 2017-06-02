@@ -5,7 +5,9 @@ import (
 	"github.com/flosch/pongo2"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"golang-gin/sessions"
 	"gopkg.in/gin-gonic/gin.v1"
+	//"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -50,9 +52,22 @@ func (ct *ArticleController) Store(c *gin.Context) {
 		return
 	}
 	defer db.Close()
+	var userId string
+	session := sessions.Default(c)
+	if s, ok := session.Get("authUserId").(string); ok && len(s) != 0 {
+		//log.Println(session.Get("authUserName"))
+		userId = s
+	} else {
+		userId = "0"
+	}
 	content := c.PostForm("content")
 	unix_time := time.Now().Unix()
-	db.MustExec(`INSERT INTO articles (content,created_at,updated_at) VALUES (?,?,?)`, content, unix_time, unix_time)
+	_, err = db.Exec(`INSERT INTO articles (user_id,content,created_at,updated_at) VALUES (?,?,?,?)`, userId, content, unix_time, unix_time)
+	if err != nil {
+		c.String(200, "提交失败。")
+		//log.Println(err)
+		return
+	}
 	c.Redirect(http.StatusMovedPermanently, "/")
 }
 

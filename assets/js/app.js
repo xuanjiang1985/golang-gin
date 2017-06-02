@@ -180,7 +180,7 @@ $(function(){
 			    密码确认: {
 			    	required: true,
 			      	minlength: 6,
-			      	equalTo: "#password"
+			      	equalTo: "#re-password"
 			    }
 			  },
 			  messages: {
@@ -210,6 +210,53 @@ $(function(){
 		}).mouseleave(function(){
 			$("#user-dropdown").hide();
 		});
+		//post login
+		$("#btn-login").click(function(){
+			var email = $("#email").val();
+			var password = $("#password").val();
+			if (email == "") {
+				$(this).prev().addClass("text-danger bg-danger").text("邮箱不能为空");
+				return false;
+			}
+			var reg = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+			    if (!reg.test(email)) {
+			        $(this).prev().addClass("text-danger bg-danger").text("邮箱格式不对，如：name@domain.com");
+			       return false;
+			  }
+
+			if (password == "") {
+				$(this).prev().addClass("text-danger bg-danger").text("密码不能为空");
+				return false;
+			}
+
+			if (password.length < 6) {
+				$(this).prev().addClass("text-danger bg-danger").text("密码长度至少6位字符");
+				return false;
+			}
+
+			$(this).prev().removeClass("text-danger bg-danger").html('<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i> 登录中...');
+			
+			$.ajax({
+			type:"post",
+			url: "/login",
+			headers: {"X-CSRF-TOKEN": $("input[name=_csrf]").val()},
+			dataType:'json',
+            data: {'email':email,'password':password},
+            success: function(data){
+            	if(data.error != ""){
+            		$("#btn-login").prev().addClass("text-danger bg-danger").text(data.error);
+            		return false;
+            	}
+      			window.location.reload();
+            },
+            error: function(data){
+                $("#btn-login").prev().addClass("text-danger bg-danger").text(data.statusText);
+            }
+			});
+
+		});
+
+		
 });
 
 // give thanks

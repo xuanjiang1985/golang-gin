@@ -45,6 +45,7 @@ func main() {
 	r.GET("/register", authC.GetRegister)
 	r.GET("/logout", authC.GetLogout)
 	r.POST("/register", authC.PostRegister)
+	r.POST("/login", authC.PostLogin)
 	r.Run(":8080")
 }
 
@@ -84,13 +85,12 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		authValue := session.Get("authUserName")
-		log.Println(authValue)
-		if authValue == nil {
-			user := HasAuth{false, ""}
-			c.Set("authUser", user)
-		} else {
-			s, _ := authValue.(string)
+		if s, ok := session.Get("authUserName").(string); ok && len(s) != 0 {
 			user := HasAuth{true, s}
+			c.Set("authUser", user)
+			log.Println(authValue)
+		} else {
+			user := HasAuth{false, ""}
 			c.Set("authUser", user)
 		}
 		c.Next()

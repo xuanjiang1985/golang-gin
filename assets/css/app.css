@@ -15,6 +15,7 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 #user-dropdown {display: none; position: absolute; right: -18px;padding: 10px 0; text-align: center; color: #515151;background-color: white;box-shadow: -2px 2px 5px #828282;}
 #user-dropdown li {width: 100px;padding-top: 10px; list-style-type: none;}
 #user-dropdown li a {display: inline-block;width: 100%; font-size: 14px;}
+#user-dropdown li span {color: #32CD32;}
 .message {margin: 10px 0;background-color: #fcfcfc;}
 .author {display: block;margin-bottom: 8px;color: #969696;}
 .thanks {color: #969696;}
