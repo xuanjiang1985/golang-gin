@@ -30,13 +30,14 @@ func (ct *ArticleController) Get(c *gin.Context) {
 	}
 	defer db.Close()
 
-	p := []Articles{}
-	err = db.Select(&p, "SELECT * FROM articles")
+	p := []ArticlesUser{}
+	err = db.Select(&p, "SELECT *,users.name FROM articles left join users on articles.user_id = users.id")
 	if err != nil {
 		seelog.Error("can't read db ", err)
 		return
 	}
-	seelog.Debug(&p)
+	//seelog.Debug(&p)
+	//log.Println(p)
 	c.HTML(http.StatusOK, "article.html", pongo2.Context{"data": &p})
 }
 
@@ -52,14 +53,15 @@ func (ct *ArticleController) Store(c *gin.Context) {
 		return
 	}
 	defer db.Close()
-	var userId string
+	var userId int
 	session := sessions.Default(c)
-	if s, ok := session.Get("authUserId").(string); ok && len(s) != 0 {
+	if s, ok := session.Get("authUserId").(int); ok && s > 0 {
 		//log.Println(session.Get("authUserName"))
 		userId = s
 	} else {
-		userId = "0"
+		userId = 0
 	}
+	//log.Println(userId)
 	content := c.PostForm("content")
 	unix_time := time.Now().Unix()
 	_, err = db.Exec(`INSERT INTO articles (user_id,content,created_at,updated_at) VALUES (?,?,?,?)`, userId, content, unix_time, unix_time)

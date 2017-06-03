@@ -11,7 +11,11 @@
 		<div class="col-sm-8 col-sm-offset-2">
 			<div class="well well-sm message">
 				<span class="author">
-					{% if article.User_id ==0 %}<i class="fa fa-user" aria-hidden="true"></i> 匿名用户 &nbsp;&nbsp;{% endif %}
+					{% if article.User_id ==0 %}
+					<i class="fa fa-user" aria-hidden="true"></i> 匿名用户 &nbsp;&nbsp;
+					{% else %}
+					<i class="fa fa-user" aria-hidden="true"></i> {{ article.User_name.String }} &nbsp;&nbsp;
+					{% endif %}
 					<i>{{ article.Created_at }}</i>
 				</span>
 				<p class="msg-content">{{ article.Content }}</p>

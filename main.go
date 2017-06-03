@@ -2,6 +2,7 @@ package main
 
 import (
 	//"errors"
+	"errors"
 	"github.com/robvdl/pongo2gin"
 	"golang-gin/controller"
 	"golang-gin/csrf"
@@ -46,6 +47,11 @@ func main() {
 	r.GET("/logout", authC.GetLogout)
 	r.POST("/register", authC.PostRegister)
 	r.POST("/login", authC.PostLogin)
+	authorized := r.Group("/auth")
+	authorized.Use(AuthRequired())
+	{
+		authorized.GET("/setting", authC.GetSetting)
+	}
 	r.Run(":8080")
 }
 
@@ -76,24 +82,38 @@ func Recover() gin.HandlerFunc {
 	}
 }
 
-//Auth
+// if Auth
 func AuthMiddleware() gin.HandlerFunc {
 	type HasAuth struct {
 		Check    bool
 		UserName string
+		UserId   int
 	}
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		authValue := session.Get("authUserName")
+		//authValue := session.Get("authUserName")
 		if s, ok := session.Get("authUserName").(string); ok && len(s) != 0 {
-			user := HasAuth{true, s}
+			user := HasAuth{true, s, session.Get("authUserId").(int)}
 			c.Set("authUser", user)
-			log.Println(authValue)
+			//log.Println(authValue)
 		} else {
-			user := HasAuth{false, ""}
+			user := HasAuth{false, "", 0}
 			c.Set("authUser", user)
 		}
 		c.Next()
+	}
+}
+
+//authorized
+func AuthRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		//authValue := session.Get("authUserName")
+		if s, ok := session.Get("authUserName").(string); ok && len(s) != 0 {
+			c.Next()
+		} else {
+			c.AbortWithError(401, errors.New("没有权限访问。"))
+		}
 	}
 }
 

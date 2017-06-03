@@ -29,7 +29,7 @@ func (ct *IndexController) Get(c *gin.Context) {
 	}
 	defer db.Close()
 
-	p := []Articles{}
+	p := []ArticlesUser{}
 
 	//if has page param for articles
 	page := c.Query("page")
@@ -48,7 +48,7 @@ func (ct *IndexController) Get(c *gin.Context) {
 		current_page = b
 	}
 	//sql select 10 articles
-	err = db.Select(&p, "SELECT *, FROM_UNIXTIME(created_at, '%Y-%m-%d %H:%i') as created_at FROM articles ORDER BY id DESC LIMIT ?,10", skip)
+	err = db.Select(&p, "SELECT articles.id as id,articles.user_id as user_id,articles.thanks as thanks,articles.comments as comments,articles.content as content,FROM_UNIXTIME(articles.created_at, '%Y-%m-%d %H:%i') as created_at, users.name as user_name FROM articles left join users on articles.user_id = users.id ORDER BY id DESC LIMIT ?,10", skip)
 	if err != nil {
 		seelog.Error("can't read db ", err)
 		return
@@ -65,7 +65,7 @@ func (ct *IndexController) Get(c *gin.Context) {
 	all = int(allpage)
 
 	csrfToken := csrf.GetToken(c)
-	//auth
+	//if auth
 	authUser, _ := c.Get("authUser")
 	//log.Println(authUser)
 	c.HTML(http.StatusOK, "index.html", pongo2.Context{

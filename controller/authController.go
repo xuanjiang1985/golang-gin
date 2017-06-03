@@ -177,3 +177,12 @@ func (ct *AuthController) PostLogin(c *gin.Context) {
 		"error":  "",
 	})
 }
+
+func (ct *AuthController) GetSetting(c *gin.Context) {
+	authUser, _ := c.Get("authUser")
+	csrfToken := csrf.GetToken(c)
+	c.HTML(http.StatusOK, "auth/setting.html", pongo2.Context{
+		"authUser": authUser,
+		"token":    csrfToken,
+	})
+}

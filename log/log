@@ -13,3 +13,8 @@
 2017-05-30 19:56:06 [DBG] [controller/authController.go:50] Name: 周快乐简单来说解放路空间 does not validate as length(3|12);Email: non zero value required;Confirm_password: 123456 does not validate as matches(Password);
 2017-05-30 19:56:06 [INF] [controller/authController.go:51] false
 2017-05-30 20:10:05 [INF] [controller/authController.go:53] true
+2017-06-02 22:32:36 [ERR] [controller/indexController.go:54] can't read db Error 1052: Column 'created_at' in field list is ambiguous
+2017-06-02 22:34:55 [ERR] [controller/indexController.go:54] can't read db Error 1052: Column 'created_at' in field list is ambiguous
+2017-06-02 22:36:23 [ERR] [controller/indexController.go:54] can't read db Error 1052: Column 'id' in order clause is ambiguous
+2017-06-02 22:39:33 [ERR] [controller/indexController.go:54] can't read db missing destination name name in *[]ctrl.ArticlesUser
+2017-06-02 22:41:55 [ERR] [controller/indexController.go:54] can't read db sql: Scan error on column index 6: unsupported Scan, storing driver.Value type <nil> into type *string

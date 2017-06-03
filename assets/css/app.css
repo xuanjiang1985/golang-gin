@@ -34,6 +34,8 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .btn-comment {float: right;}
 #page {text-align: center;}
 .comments-page {text-align: center;margin: 8px 0;}
+/*setting*/
+#form-sex label { margin-right: 20px; }
 /*all css*/
 .theme-color {color: #f67c03;}
 .theme-a {color: #515151;}

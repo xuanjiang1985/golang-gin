@@ -1,6 +1,7 @@
 package ctrl
 
 import (
+	"database/sql"
 	"golang-gin/conf"
 )
 
@@ -17,6 +18,17 @@ type Articles struct {
 	Content    string
 	Created_at string
 	Updated_at string
+}
+
+//articles with UserName in table
+type ArticlesUser struct {
+	Id         int
+	User_id    int
+	Thanks     int
+	Comments   int
+	Content    string
+	Created_at string
+	User_name  sql.NullString
 }
 
 //comments in table
