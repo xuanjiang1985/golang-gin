@@ -18,3 +18,5 @@
 2017-06-02 22:36:23 [ERR] [controller/indexController.go:54] can't read db Error 1052: Column 'id' in order clause is ambiguous
 2017-06-02 22:39:33 [ERR] [controller/indexController.go:54] can't read db missing destination name name in *[]ctrl.ArticlesUser
 2017-06-02 22:41:55 [ERR] [controller/indexController.go:54] can't read db sql: Scan error on column index 6: unsupported Scan, storing driver.Value type <nil> into type *string
+2017-06-05 10:47:27 [ERR] [controller/indexController.go:54] can't read db missing destination name sex in *[]ctrl.ArticlesUser
+2017-06-05 10:48:28 [ERR] [controller/indexController.go:54] can't read db sql: Scan error on column index 7: converting driver.Value type <nil> ("<nil>") to a int: invalid syntax

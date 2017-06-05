@@ -35,11 +35,19 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 #page {text-align: center;}
 .comments-page {text-align: center;margin: 8px 0;}
 /*setting*/
-#form-sex label { margin-right: 20px; }
+#setting {margin-bottom: : 20px;}
+#setting li {list-style-type: none; padding: 5px 0; margin-bottom: 3px; text-align: center;}
+.setting {background-color: #f5f5f5;}
+.setting a {color: #969696;}
+.setting a:hover {color: black;}
+.setting-active {background-color: #00cdcd;}
+.setting-active a {color: white;}
+.setting-active a:hover {color: white;}
+#radio-sex label {margin-right: 10px:}
 /*all css*/
 .theme-color {color: #f67c03;}
 .theme-a {color: #515151;}
 .theme-a:hover {color: #f67c03;text-decoration: none;}
 .theme-a:focus {text-decoration: none;}
-#ajax-status {position: fixed;display: none; width: 300px;height: 100px; padding: 15px 10px;text-align: center; margin:auto; left: 0; right: 0;top:0;bottom:0; border-radius: 5px;background-color: rgba(0,0,0,0.7); font-size: 18px;color: white;}
+#ajax-status {position: fixed;display: none; width: 300px;height: 55px; padding: 15px 10px;text-align: center; margin:auto; left: 0; right: 0;top:0;bottom:0; border-radius: 5px;background-color: rgba(0,0,0,0.7); font-size: 18px;color: white;}
 .text-success1 {color: #05d879;/*亮绿色*/}

@@ -1,0 +1,78 @@
+{% extends "../base.html" %}
+
+{% block title %}
+<title>爱吐槽 个人设置 修改昵称</title>
+{% endblock %}
+
+{% block content %}
+<div class="container" id="msg-section">
+<br>
+		{% if errors %}
+		<div class="alert alert-danger">
+			<ul>
+				{% for error in errors %}
+				<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	<div class="col-sm-3">
+		<ul id="setting">
+			<li class="setting"><a href="/auth/setting/name"><i class="fa fa-user-circle-o" aria-hidden="true"></i> 修改昵称</a></li>
+			<li class="setting-active"><a href="/auth/setting/sex"><i class="fa fa-mars" aria-hidden="true"></i> 修改性别</a></li>
+			<li class="setting"><a href="/auth/setting/header"><i class="fa fa-picture-o" aria-hidden="true"></i> 上传头像</a></li>
+			<li class="setting"><a href="/auth/setting/password"><i class="fa fa-key" aria-hidden="true"></i> 修改密码</a></li>
+		</ul>
+	</div>
+	<div class="col-sm-offset-1 col-sm-7">
+	<br>
+		        <div id="ajax-status2">
+				&nbsp;
+				</div>
+				<input type="hidden" name="_csrf" value="{{ token }}">
+	        	<div class="radio" id="radio-sex">
+	        	{% if authUser.Sex == 0 %}
+				  <label>
+				    <input type="radio" name="sex" value="0" checked>保密
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="1">男性
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="2">女性
+				  </label>
+				 {% elif authUser.Sex == 1 %}
+				 <label>
+				    <input type="radio" name="sex" value="0">保密
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="1" checked>男性
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="2">女性
+				  </label>
+				 {% else %}
+				 <label>
+				    <input type="radio" name="sex" value="0">保密
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="1">男性
+				  </label>
+				  &nbsp;&nbsp;
+				  <label>
+				    <input type="radio" name="sex" value="2" checked>女性
+				  </label>
+				 {% endif %}
+				</div>
+	        	<br>
+				<button class="btn btn-theme" id="btn-set-sex">修改</button>
+		       <br><br>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

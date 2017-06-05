@@ -14,7 +14,7 @@
 					{% if article.User_id ==0 %}
 					<i class="fa fa-user" aria-hidden="true"></i> 匿名用户 &nbsp;&nbsp;
 					{% else %}
-					<i class="fa fa-user" aria-hidden="true"></i> {{ article.User_name.String }} &nbsp;&nbsp;
+					<i class="fa {% if article.Sex.Int64 == 1 %}fa-male{% elif article.Sex.Int64 == 2 %}fa-female{% else %}fa-user{% endif %}" aria-hidden="true"></i> {{ article.User_name.String }} &nbsp;&nbsp;
 					{% endif %}
 					<i>{{ article.Created_at }}</i>
 				</span>

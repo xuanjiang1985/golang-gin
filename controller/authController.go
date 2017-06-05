@@ -12,6 +12,7 @@ import (
 	"gopkg.in/gin-gonic/gin.v1"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -49,7 +50,7 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	defer db.Close()
 
 	type Validator struct {
-		Name             string `valid:"required~昵称：不能为空,length(4|15)~昵称：4至15个字符之间"`
+		Name             string `valid:"required~昵称：不能为空,stringlength(3|10)~昵称：3至10个字符之间"`
 		Email            string `valid:"required~邮箱：不能为空,email~邮箱：必须是email格式"`
 		Password         string `valid:"required~密码：不能为空,length(6|150)~密码：至少6个字符"`
 		Confirm_password string `valid:"required~确认密码：不能为空,length(6|150)~确认密码：至少6个字符"`
@@ -171,6 +172,7 @@ func (ct *AuthController) PostLogin(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("authUserName", user.Name)
 	session.Set("authUserId", user.Id)
+	session.Set("authUserSex", user.Sex)
 	session.Save()
 	c.JSON(200, gin.H{
 		"status": "ok",
@@ -178,10 +180,138 @@ func (ct *AuthController) PostLogin(c *gin.Context) {
 	})
 }
 
-func (ct *AuthController) GetSetting(c *gin.Context) {
+func (ct *AuthController) GetSettingName(c *gin.Context) {
 	authUser, _ := c.Get("authUser")
 	csrfToken := csrf.GetToken(c)
-	c.HTML(http.StatusOK, "auth/setting.html", pongo2.Context{
+	c.HTML(http.StatusOK, "auth/setting-name.html", pongo2.Context{
+		"authUser": authUser,
+		"token":    csrfToken,
+	})
+}
+
+func (ct *AuthController) PostSettingName(c *gin.Context) {
+	userName := c.PostForm("name")
+	//validate
+	type Validator struct {
+		Name string `valid:"required~昵称：不能为空,stringlength(3|8)~昵称：3至8个字符之间"`
+	}
+	data := &Validator{
+		Name: userName,
+	}
+	//true or false of validator
+	_, err := valid.ValidateStruct(data)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	session := sessions.Default(c)
+	hasUserName := session.Get("authUserName").(string)
+	if userName == hasUserName {
+		c.JSON(200, gin.H{
+			"error": "此昵称你正在使用",
+		})
+		return
+	}
+	//开启日志
+	seelog.ReplaceLogger(logger)
+	defer seelog.Flush()
+	//数据库连接
+	db, err := sqlx.Connect("mysql", sqlconn)
+	if err != nil {
+		seelog.Error("can't connect db ", err)
+		return
+	}
+	defer db.Close()
+
+	userId := session.Get("authUserId").(int)
+	_, err = db.Exec(`UPDATE users SET name=? WHERE id=?`, userName, userId)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	//update session
+
+	session.Set("authUserName", userName)
+	session.Save()
+	c.JSON(200, gin.H{
+		"error":   "",
+		"success": "昵称修改成功",
+	})
+}
+
+func (ct *AuthController) PostSettingSex(c *gin.Context) {
+	sex := c.PostForm("sex")
+	//validate
+	type Validator struct {
+		Sex string `valid:"required~性别：不能为空,int~必须是整数"`
+	}
+	data := &Validator{
+		Sex: sex,
+	}
+	//true or false of validator
+	_, err := valid.ValidateStruct(data)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	//开启日志
+	seelog.ReplaceLogger(logger)
+	defer seelog.Flush()
+	//数据库连接
+	db, err := sqlx.Connect("mysql", sqlconn)
+	if err != nil {
+		seelog.Error("can't connect db ", err)
+		return
+	}
+	defer db.Close()
+	//session start
+	session := sessions.Default(c)
+	userId := session.Get("authUserId").(int)
+	_, err = db.Exec(`UPDATE users SET sex=? WHERE id=?`, sex, userId)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	i, _ := strconv.Atoi(sex)
+	session.Set("authUserSex", i)
+	session.Save()
+	c.JSON(200, gin.H{
+		"error":   "",
+		"success": "性别修改成功",
+	})
+}
+
+func (ct *AuthController) GetSettingSex(c *gin.Context) {
+	authUser, _ := c.Get("authUser")
+	csrfToken := csrf.GetToken(c)
+	c.HTML(http.StatusOK, "auth/setting-sex.html", pongo2.Context{
+		"authUser": authUser,
+		"token":    csrfToken,
+	})
+}
+
+func (ct *AuthController) GetSettingHeader(c *gin.Context) {
+	authUser, _ := c.Get("authUser")
+	csrfToken := csrf.GetToken(c)
+	c.HTML(http.StatusOK, "auth/setting-header.html", pongo2.Context{
+		"authUser": authUser,
+		"token":    csrfToken,
+	})
+}
+
+func (ct *AuthController) GetSettingPassword(c *gin.Context) {
+	authUser, _ := c.Get("authUser")
+	csrfToken := csrf.GetToken(c)
+	c.HTML(http.StatusOK, "auth/setting-password.html", pongo2.Context{
 		"authUser": authUser,
 		"token":    csrfToken,
 	})

@@ -29,6 +29,7 @@ type ArticlesUser struct {
 	Content    string
 	Created_at string
 	User_name  sql.NullString
+	Sex        sql.NullInt64
 }
 
 //comments in table

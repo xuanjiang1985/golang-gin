@@ -50,7 +50,12 @@ func main() {
 	authorized := r.Group("/auth")
 	authorized.Use(AuthRequired())
 	{
-		authorized.GET("/setting", authC.GetSetting)
+		authorized.GET("/setting/name", authC.GetSettingName)
+		authorized.POST("/setting/name", authC.PostSettingName)
+		authorized.GET("/setting/sex", authC.GetSettingSex)
+		authorized.POST("/setting/sex", authC.PostSettingSex)
+		authorized.GET("/setting/header", authC.GetSettingHeader)
+		authorized.GET("/setting/password", authC.GetSettingPassword)
 	}
 	r.Run(":8080")
 }
@@ -88,16 +93,17 @@ func AuthMiddleware() gin.HandlerFunc {
 		Check    bool
 		UserName string
 		UserId   int
+		Sex      int
 	}
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		//authValue := session.Get("authUserName")
 		if s, ok := session.Get("authUserName").(string); ok && len(s) != 0 {
-			user := HasAuth{true, s, session.Get("authUserId").(int)}
+			user := HasAuth{true, s, session.Get("authUserId").(int), session.Get("authUserSex").(int)}
 			c.Set("authUser", user)
 			//log.Println(authValue)
 		} else {
-			user := HasAuth{false, "", 0}
+			user := HasAuth{false, "", 0, 0}
 			c.Set("authUser", user)
 		}
 		c.Next()

@@ -166,8 +166,7 @@ $(function(){
 			rules: {
 			    昵称: {
 			    	required: true,
-			    	minlength: 4,
-			    	maxlength: 15
+			    	minlength: 4
 			    },
 			    邮箱: {
 			      required: true,
@@ -186,8 +185,7 @@ $(function(){
 			  messages: {
 			    昵称: {
 			    	required: "不能为空",
-			    	minlength: "至少4个字符",
-			    	maxlength: "最多15个字符"
+			    	minlength: "至少4个字符"
 			    },
 			    邮箱: {
 			      required: "不能为空",
@@ -248,15 +246,86 @@ $(function(){
             		return false;
             	}
       			window.location.reload();
-            },
+            	},
             error: function(data){
                 $("#btn-login").prev().addClass("text-danger bg-danger").text(data.statusText);
-            }
+            	}
 			});
 
 		});
+//change name
+	$("#btn-set-name").click(function(){
+		$.ajax({
+			type:"post",
+			url: "/auth/setting/name",
+			headers: {"X-CSRF-TOKEN": $("input[name=_csrf]").val()},
+			dataType:'json',
+            data: {'name':$("input[name=name]").val()},
+            success: function(data){
+            	if(data.error != ""){
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.error +
+            		'</div>'
+            		);
+            	} else {
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-success">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.success +
+            		'</div>'
+            		);
+            	}
+            },
+            error: function(data){
+            	$("#ajax-status").text(data.statusText);
+				$("#ajax-status").show();
+				$("#ajax-status").fadeOut(2000);
+            }
+		});
+	});
+	//change sex setting
+	$("#btn-set-sex").click(function(){
+		$.ajax({
+			type:"post",
+			url: "/auth/setting/sex",
+			headers: {"X-CSRF-TOKEN": $("input[name=_csrf]").val()},
+			dataType:'json',
+            data: {'sex':$("input[name=sex]:checked").val()},
+            success: function(data){
+            	if(data.error != ""){
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.error +
+            		'</div>'
+            		);
+            	} else {
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-success">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.success +
+            		'</div>'
+            		);
+            	}
+            },
+            error: function(data){
+            	$("#ajax-status").text(data.statusText);
+				$("#ajax-status").show();
+				$("#ajax-status").fadeOut(2000);
+            }
+		});
+	});
 
-		
 });
 
 // give thanks
@@ -267,4 +336,14 @@ $(function(){
 			$(this).unbind("click");
 		$.get("/article/add-thank/" + id);
 	});
+	$("#login img").click(function(){
+		if($("#user-dropdown").is(":hidden")){
+			$("#user-dropdown").show();
+		} else {
+			$("#user-dropdown").hide();
+		}
+		
+	});
+
+
 
