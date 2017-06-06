@@ -346,7 +346,11 @@ $(function(){
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    $("#img-header").attr("src", data.src);
+                	if (data.error != "") {
+                		alert(data.error);
+                		return
+                	}
+                    $("#img-header, #img-base-header").attr("src", data.src);
                     $("#ajax-status2").html('');
                 },
                 error: function(data){

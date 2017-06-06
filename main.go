@@ -30,14 +30,13 @@ func main() {
 			c.String(403, "403, token mismatch, please return and refresh the page.")
 		},
 	}))
+	r.GET("/test", forTest)
 	r.Use(AuthMiddleware())
 	//open log middleware
 	r.Use(Logger())
-
 	r.Static("/public", "./public")
 	r.HTMLRender = pongo2gin.Default()
 	r.GET("/", indexC.Get)
-	r.GET("/test", forTest)
 	r.GET("/article", articleC.Get)
 	r.GET("/article/add-thank/:id", articleC.AddThank)
 	r.POST("/article/add-comment", articleC.AddComment)
@@ -58,7 +57,7 @@ func main() {
 		authorized.POST("/setting/header", authC.PostSettingHeader)
 		authorized.GET("/setting/password", authC.GetSettingPassword)
 	}
-	r.Run(":8080")
+	r.Run(":8081")
 }
 
 //middlewares
@@ -127,5 +126,8 @@ func AuthRequired() gin.HandlerFunc {
 
 //test
 func forTest(c *gin.Context) {
-
+	session := sessions.Default(c)
+	data := session.Flashes("authUserName", "authUserId", "authUserSex", "authUserHeader")
+	log.Println(data)
+	c.String(200, "clear sessions")
 }

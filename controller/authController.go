@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	valid "github.com/asaskevich/govalidator"
 	seelog "github.com/cihub/seelog"
+	"github.com/dchest/uniuri"
 	"github.com/flosch/pongo2"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -12,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gin-gonic/gin.v1"
 	"image"
-	"io/ioutil"
+	"image/jpeg"
 	"log"
 	"net/http"
 	"os"
@@ -104,7 +105,8 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	//log.Println(userId)
 	session := sessions.Default(c)
 	session.Set("authUserName", c.PostForm("昵称"))
-	session.Set("authUserId", userId)
+	session.Set("authUserId", int(userId))
+	session.Set("authUserSex", 0)
 	session.Set("authUserHeader", "/public/images/header.jpg")
 	session.Save()
 	c.Redirect(302, "/")
@@ -314,45 +316,54 @@ func (ct *AuthController) GetSettingHeader(c *gin.Context) {
 	})
 }
 func (ct *AuthController) PostSettingHeader(c *gin.Context) {
+	//开启日志
+	seelog.ReplaceLogger(logger)
+	defer seelog.Flush()
+
 	base64img := c.PostForm("base64img")
 	base64Binary := strings.Replace(base64img, "data:image/jpeg;base64,", "", -1)
 	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(base64Binary))
-	img, _, _ := image.Decode(reader)
+	img, _, err := image.Decode(reader)
 	if err != nil {
 		log.Fatal("error:", err)
 	}
 
-	f, _ := os.Create("zhougang.jpeg") //创建文件
-	err1 := ioutil.WriteFile(f, []byte(dataBin), 0666)
-	if err1 != nil {
-		log.Fatal("error:", err1)
+	//创建文件
+	timeNow := time.Now().Format("20060102")
+	os.MkdirAll("./public/upload/"+timeNow, 0777)
+	savePath := "./public/upload/" + timeNow + "/"
+	fileName := uniuri.New() + ".jpeg"
+	urlPath := "/public/upload/" + timeNow + "/" + fileName
+	f, err := os.Create(savePath + fileName)
+	if err != nil {
+		seelog.Error("can't mkdir ", err)
+		return
 	}
-	// //开启日志
-	// seelog.ReplaceLogger(logger)
-	// defer seelog.Flush()
-	// //数据库连接
-	// db, err := sqlx.Connect("mysql", sqlconn)
-	// if err != nil {
-	// 	seelog.Error("can't connect db ", err)
-	// 	return
-	// }
-	// defer db.Close()
-	// //session start
-	// session := sessions.Default(c)
-	// userId := session.Get("authUserId").(int)
-	// _, err = db.Exec(`UPDATE users SET sex=? WHERE id=?`, sex, userId)
-	// if err != nil {
-	// 	c.JSON(200, gin.H{
-	// 		"error": err.Error(),
-	// 	})
-	// 	return
-	// }
-	// i, _ := strconv.Atoi(sex)
-	// session.Set("authUserSex", i)
-	// session.Save()
+	defer f.Close()
+	// 转换为jpeg格式的图像，这里质量为30（质量取值是1-100）
+	jpeg.Encode(f, img, &jpeg.Options{100})
+	//数据库连接
+	db, err := sqlx.Connect("mysql", sqlconn)
+	if err != nil {
+		seelog.Error("can't connect db ", err)
+		return
+	}
+	defer db.Close()
+	//session start
+	session := sessions.Default(c)
+	userId := session.Get("authUserId").(int)
+	_, err = db.Exec(`UPDATE users SET header=? WHERE id=?`, urlPath, userId)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	session.Set("authUserHeader", urlPath)
+	session.Save()
 	c.JSON(200, gin.H{
 		"error": "",
-		"src":   base64img,
+		"src":   urlPath,
 	})
 }
 
