@@ -1,6 +1,7 @@
 package ctrl
 
 import (
+	"encoding/base64"
 	valid "github.com/asaskevich/govalidator"
 	seelog "github.com/cihub/seelog"
 	"github.com/flosch/pongo2"
@@ -10,8 +11,11 @@ import (
 	"golang-gin/sessions"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gin-gonic/gin.v1"
+	"image"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -101,6 +105,7 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("authUserName", c.PostForm("昵称"))
 	session.Set("authUserId", userId)
+	session.Set("authUserHeader", "/public/images/header.jpg")
 	session.Save()
 	c.Redirect(302, "/")
 }
@@ -173,6 +178,7 @@ func (ct *AuthController) PostLogin(c *gin.Context) {
 	session.Set("authUserName", user.Name)
 	session.Set("authUserId", user.Id)
 	session.Set("authUserSex", user.Sex)
+	session.Set("authUserHeader", user.Header)
 	session.Save()
 	c.JSON(200, gin.H{
 		"status": "ok",
@@ -305,6 +311,48 @@ func (ct *AuthController) GetSettingHeader(c *gin.Context) {
 	c.HTML(http.StatusOK, "auth/setting-header.html", pongo2.Context{
 		"authUser": authUser,
 		"token":    csrfToken,
+	})
+}
+func (ct *AuthController) PostSettingHeader(c *gin.Context) {
+	base64img := c.PostForm("base64img")
+	base64Binary := strings.Replace(base64img, "data:image/jpeg;base64,", "", -1)
+	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(base64Binary))
+	img, _, _ := image.Decode(reader)
+	if err != nil {
+		log.Fatal("error:", err)
+	}
+
+	f, _ := os.Create("zhougang.jpeg") //创建文件
+	err1 := ioutil.WriteFile(f, []byte(dataBin), 0666)
+	if err1 != nil {
+		log.Fatal("error:", err1)
+	}
+	// //开启日志
+	// seelog.ReplaceLogger(logger)
+	// defer seelog.Flush()
+	// //数据库连接
+	// db, err := sqlx.Connect("mysql", sqlconn)
+	// if err != nil {
+	// 	seelog.Error("can't connect db ", err)
+	// 	return
+	// }
+	// defer db.Close()
+	// //session start
+	// session := sessions.Default(c)
+	// userId := session.Get("authUserId").(int)
+	// _, err = db.Exec(`UPDATE users SET sex=? WHERE id=?`, sex, userId)
+	// if err != nil {
+	// 	c.JSON(200, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	return
+	// }
+	// i, _ := strconv.Atoi(sex)
+	// session.Set("authUserSex", i)
+	// session.Save()
+	c.JSON(200, gin.H{
+		"error": "",
+		"src":   base64img,
 	})
 }
 

@@ -4,6 +4,7 @@ CREATE TABLE `users` (
      `email` varchar(50) DEFAULT NULL,
      `password` varchar(60) DEFAULT NULL,
      `remember_token` varchar(100) DEFAULT '',
+     `header` varchar(255) DEFAULT '/public/images/header.jpg',
      `sex` tinyint(4) DEFAULT '0',
      `admin` tinyint(4) DEFAULT '0',
      `created_at` int(11) DEFAULT 0,

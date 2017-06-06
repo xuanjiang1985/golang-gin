@@ -44,6 +44,7 @@ nav a:hover {color: white;text-decoration: none; font-size: 18px;}
 .setting-active a {color: white;}
 .setting-active a:hover {color: white;}
 #radio-sex label {margin-right: 10px:}
+#input-header {display: none;}
 /*all css*/
 .theme-color {color: #f67c03;}
 .theme-a {color: #515151;}

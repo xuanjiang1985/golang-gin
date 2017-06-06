@@ -49,6 +49,7 @@ type Users struct {
 	Email          string
 	Password       string
 	Remember_token string
+	Header         string
 	Sex            int
 	Admin          int
 	Created_at     int

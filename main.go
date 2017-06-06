@@ -55,6 +55,7 @@ func main() {
 		authorized.GET("/setting/sex", authC.GetSettingSex)
 		authorized.POST("/setting/sex", authC.PostSettingSex)
 		authorized.GET("/setting/header", authC.GetSettingHeader)
+		authorized.POST("/setting/header", authC.PostSettingHeader)
 		authorized.GET("/setting/password", authC.GetSettingPassword)
 	}
 	r.Run(":8080")
@@ -94,16 +95,17 @@ func AuthMiddleware() gin.HandlerFunc {
 		UserName string
 		UserId   int
 		Sex      int
+		Header   string
 	}
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		//authValue := session.Get("authUserName")
 		if s, ok := session.Get("authUserName").(string); ok && len(s) != 0 {
-			user := HasAuth{true, s, session.Get("authUserId").(int), session.Get("authUserSex").(int)}
+			user := HasAuth{true, s, session.Get("authUserId").(int), session.Get("authUserSex").(int), session.Get("authUserHeader").(string)}
 			c.Set("authUser", user)
 			//log.Println(authValue)
 		} else {
-			user := HasAuth{false, "", 0, 0}
+			user := HasAuth{false, "", 0, 0, ""}
 			c.Set("authUser", user)
 		}
 		c.Next()

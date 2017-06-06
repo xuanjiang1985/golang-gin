@@ -8,7 +8,7 @@
 	<!-- <link rel="stylesheet" href="/public/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/public/build/css/app-74a4ce200c.css">
+  <link rel="stylesheet" href="/public/build/css/app-ce0ee72499.css">
     <!-- support IE8 支持 HTML5元素和媒体查询 -->
       <!--[if lt IE 9]>
          <script src="/public/js/html5shiv.js"></script>
@@ -21,7 +21,7 @@
       <a href="/"><i class="fa fa-free-code-camp fa-2x" aria-hidden="true"></i> 爱吐槽</a>
       {% if authUser.Check %}
         <div id="login">
-          <img src="/public/images/header.jpg" class="img-responsive">
+          <img src="{{ authUser.Header }}" class="img-responsive">
           <ul id="user-dropdown">
             <li><span>{{ authUser.UserName|truncatechars:7 }}</span></li>
             <li><a href="/auth/setting/name" class="theme-a"><i class="fa fa-cog" aria-hidden="true"></i> 个人设置</a></li>
@@ -109,6 +109,7 @@
 <!-- <script src="/public/js/bootstrap.min.js"></script> -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-<script src="/public/build/js/app-01c95bec83.js"></script>
+<script src="/public/build/js/app-6d70683bf9.js"></script>
+<script src="/public/dist/lrz.bundle.js"></script>
 </body>
 </html>

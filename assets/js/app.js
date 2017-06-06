@@ -325,7 +325,40 @@ $(function(){
             }
 		});
 	});
-
+	//upload header photo
+	$("#btn-set-header").click(function(){
+      $("#input-header").click();
+    });
+    $("#input-header").change(function(){
+        /* 压缩图片 */
+        lrz(this.files[0], {
+            width: 100 //设置压缩参数
+        }).then(function (rst) {
+            /* 处理成功后执行 */
+            $("#ajax-status2").html('<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i> 上传中...');
+            rst.formData.append('base64img', rst.base64); // 添加额外参数
+            $.ajax({
+                url: "/auth/setting/header",
+                type: "POST",
+                data: rst.formData,
+                headers: {"X-CSRF-TOKEN": $("input[name=_csrf]").val()},
+                dataType:'json',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $("#img-header").attr("src", data.src);
+                    $("#ajax-status2").html('');
+                },
+                error: function(data){
+                	alert(data.statusText);
+                }
+            });
+        }).catch(function (err) {
+            alert(err)
+        }).always(function () {
+            /* 必然执行 */
+        })
+    });
 });
 
 // give thanks
