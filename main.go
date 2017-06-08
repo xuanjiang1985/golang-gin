@@ -56,6 +56,7 @@ func main() {
 		authorized.GET("/setting/header", authC.GetSettingHeader)
 		authorized.POST("/setting/header", authC.PostSettingHeader)
 		authorized.GET("/setting/password", authC.GetSettingPassword)
+		authorized.POST("/setting/password", authC.PostSettingPassword)
 	}
 	r.Run(":8081")
 }

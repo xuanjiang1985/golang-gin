@@ -332,7 +332,7 @@ $(function(){
     $("#input-header").change(function(){
         /* 压缩图片 */
         lrz(this.files[0], {
-            width: 100 //设置压缩参数
+            width: 44//设置压缩参数
         }).then(function (rst) {
             /* 处理成功后执行 */
             $("#ajax-status2").html('<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i> 上传中...');
@@ -350,7 +350,8 @@ $(function(){
                 		alert(data.error);
                 		return
                 	}
-                    $("#img-header, #img-base-header").attr("src", data.src);
+                    $("#img-header").attr("src", data.src);
+                    $("#img-base-header").css("background-image",'url('+ data.src +')');
                     $("#ajax-status2").html('');
                 },
                 error: function(data){
@@ -363,6 +364,80 @@ $(function(){
             /* 必然执行 */
         })
     });
+    //change password setting
+    $("#btn-set-password").click(function(){
+    	var oldpsd = $("input[name=old-psd]").val();
+    	var newpsd = $("input[name=new-psd]").val();
+    	var newpsd_confirm = $("input[name=new-psd-confirm]").val();
+    	if (oldpsd == "" || newpsd == "" || newpsd_confirm =="") {
+				$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>\
+			             密码不能为空\
+            		</div>'
+            		);
+				return false;
+			}
+			if (oldpsd.length < 6 || newpsd.length < 6 || newpsd_confirm < 6) {
+				$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>\
+			             长度至少6位\
+            		</div>'
+            		);
+				return false;
+			}
+
+			if (newpsd != newpsd_confirm) {
+				$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>\
+			             两次新密码不相同\
+            		</div>'
+            		);
+				return false;
+			}
+
+			$.ajax({
+			type:"post",
+			url: "/auth/setting/password",
+			headers: {"X-CSRF-TOKEN": $("input[name=_csrf]").val()},
+			dataType:'json',
+            data: {'oldpsd':oldpsd,'newpsd':newpsd,'newpsd_confirm':newpsd_confirm},
+            success: function(data){
+            	if(data.error != ""){
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-danger">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.error +
+            		'</div>'
+            		);
+            	} else {
+            		$("#ajax-status2").html('\
+            		<div class="alert alert-success">\
+	            		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">\
+			                &times;\
+			            </button>'
+			             + data.success +
+            		'</div>'
+            		);
+            	}
+            },
+            error: function(data){
+            	$("#ajax-status").text(data.statusText);
+				$("#ajax-status").show();
+				$("#ajax-status").fadeOut(2000);
+            }
+		});
+    });
 });
 
 // give thanks
@@ -373,7 +448,7 @@ $(function(){
 			$(this).unbind("click");
 		$.get("/article/add-thank/" + id);
 	});
-	$("#login img").click(function(){
+	$("#img-base-header").click(function(){
 		if($("#user-dropdown").is(":hidden")){
 			$("#user-dropdown").show();
 		} else {

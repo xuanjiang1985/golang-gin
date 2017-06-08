@@ -55,7 +55,7 @@ func (ct *AuthController) PostRegister(c *gin.Context) {
 	defer db.Close()
 
 	type Validator struct {
-		Name             string `valid:"required~昵称：不能为空,stringlength(3|10)~昵称：3至10个字符之间"`
+		Name             string `valid:"required~昵称：不能为空,stringlength(3|12)~昵称：3至12个字符之间"`
 		Email            string `valid:"required~邮箱：不能为空,email~邮箱：必须是email格式"`
 		Password         string `valid:"required~密码：不能为空,length(6|150)~密码：至少6个字符"`
 		Confirm_password string `valid:"required~确认密码：不能为空,length(6|150)~确认密码：至少6个字符"`
@@ -168,7 +168,7 @@ func (ct *AuthController) PostLogin(c *gin.Context) {
 	errors := bcrypt.CompareHashAndPassword([]byte(user.Password), password)
 	if errors != nil {
 		log.Println(errors)
-		log.Println(user.Password)
+		//log.Println(user.Password)
 		c.JSON(200, gin.H{
 			"status": "ok",
 			"error":  "账户或密码错误2",
@@ -201,7 +201,7 @@ func (ct *AuthController) PostSettingName(c *gin.Context) {
 	userName := c.PostForm("name")
 	//validate
 	type Validator struct {
-		Name string `valid:"required~昵称：不能为空,stringlength(3|8)~昵称：3至8个字符之间"`
+		Name string `valid:"required~昵称：不能为空,stringlength(3|12)~昵称：3至12个字符之间"`
 	}
 	data := &Validator{
 		Name: userName,
@@ -373,5 +373,88 @@ func (ct *AuthController) GetSettingPassword(c *gin.Context) {
 	c.HTML(http.StatusOK, "auth/setting-password.html", pongo2.Context{
 		"authUser": authUser,
 		"token":    csrfToken,
+	})
+}
+
+func (ct *AuthController) PostSettingPassword(c *gin.Context) {
+	newpsd := c.PostForm("newpsd")
+	oldpsd := c.PostForm("oldpsd")
+	newpsd_confirm := c.PostForm("newpsd_confirm")
+
+	//validate
+	type Validator struct {
+		oldpsd         string `valid:"required~旧密码：不能为空,length(6|160)~旧密码：至少6个字符"`
+		newpsd         string `valid:"required~新密码：不能为空,length(6|160)~新密码：至少6个字符"`
+		newpsd_confirm string `valid:"required~新密码确认：不能为空,length(6|160)~新密码确认：至少6个字符"`
+	}
+	data := &Validator{
+		oldpsd:         oldpsd,
+		newpsd:         newpsd,
+		newpsd_confirm: newpsd_confirm,
+	}
+	//true or false of validator
+	_, err := valid.ValidateStruct(data)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if newpsd != newpsd_confirm {
+		c.JSON(200, gin.H{
+			"error": "两次新密码不相同",
+		})
+		return
+	}
+
+	if newpsd == oldpsd {
+		c.JSON(200, gin.H{
+			"error": "此密码你正在使用",
+		})
+		return
+	}
+	//开启日志
+	seelog.ReplaceLogger(logger)
+	defer seelog.Flush()
+	//数据库连接
+	db, err := sqlx.Connect("mysql", sqlconn)
+	if err != nil {
+		seelog.Error("can't connect db ", err)
+		return
+	}
+	defer db.Close()
+	//session start
+	session := sessions.Default(c)
+	userId := session.Get("authUserId").(int)
+	password := []byte(oldpsd)
+	//validate oldpsd
+	var user Users
+	err = db.Get(&user, "SELECT * FROM users WHERE id=?", userId)
+	if err != nil {
+		//log.Println(err)
+		c.JSON(200, gin.H{
+			"error": "不存在此用户",
+		})
+		return
+	}
+	errors := bcrypt.CompareHashAndPassword([]byte(user.Password), password)
+	if errors != nil {
+		c.JSON(200, gin.H{
+			"error": "旧密码不正确",
+		})
+		return
+	}
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newpsd), bcrypt.DefaultCost)
+	_, err = db.Exec(`UPDATE users SET password=? WHERE id=?`, hashedPassword, userId)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"error":   "",
+		"success": "密码修改成功",
 	})
 }

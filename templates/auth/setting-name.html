@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container" id="msg-section">
 <br>
-	<div class="col-sm-3">
+	<div class="col-sm-3 col-xs-12">
 		<ul id="setting">
 			<li class="setting-active"><a href="/auth/setting/name"><i class="fa fa-user-circle-o" aria-hidden="true"></i> 修改昵称</a></li>
 			<li class="setting"><a href="/auth/setting/sex"><i class="fa fa-mars" aria-hidden="true"></i> 修改性别</a></li>
@@ -15,12 +15,12 @@
 			<li class="setting"><a href="/auth/setting/password"><i class="fa fa-key" aria-hidden="true"></i> 修改密码</a></li>
 		</ul>
 	</div>
-	<div class="col-sm-offset-1 col-sm-7">
+	<div class="col-sm-offset-1 col-sm-7 col-xs-12">
 				<div id="ajax-status2">
 				&nbsp;
 				</div>
 				<input type="hidden" name="_csrf" value="{{ token }}">
-	        	<input type="text" name="name" class="form-control" value="{{ authUser.UserName }}" required="required" minlength="3" placeholder="请填新的昵称，3至8个字符">
+	        	<input type="text" name="name" class="form-control" value="{{ authUser.UserName }}" required="required" minlength="3" placeholder="请填新的昵称，3至12个字符">
 	        	<br>
 				<button class="btn btn-theme" id="btn-set-name">修改</button>
 		       <br>
