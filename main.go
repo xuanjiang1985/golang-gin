@@ -35,7 +35,7 @@ func main() {
 	//open log middleware
 	r.Use(Logger())
 	r.Static("/public", "./public")
-	r.HTMLRender = pongo2gin.Default()
+	r.HTMLRender = pongo2gin.New(pongo2gin.RenderOptions{"./templates", "text/html; charset=utf-8"})
 	r.GET("/", indexC.Get)
 	r.GET("/article", articleC.Get)
 	r.GET("/article/add-thank/:id", articleC.AddThank)

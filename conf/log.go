@@ -7,6 +7,7 @@ import (
 
 var Logger seelog.LoggerInterface
 var err error
+
 var basePath = os.Getenv("GOPATH")
 
 func init() {
