@@ -1,4 +1,5 @@
 /vendor
 .env
 .DS_Store
+main
 /node_modules
